@@ -38,6 +38,7 @@ export default {
       try {
         const response = await axios.get('https://www.plushykingdom.com/api/books');
         this.books = response;
+        return this.books;
       } catch (error) {
         return error;
       }
