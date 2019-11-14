@@ -10,7 +10,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import BooksManagement from '@/components/BooksManagement.vue';
 
 export default {
