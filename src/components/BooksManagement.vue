@@ -37,7 +37,7 @@ export default {
     async getBooks() {
       try {
         const response = await axios.get('https://www.plushykingdom.com/api/books');
-        this.books = response;
+        this.books = response.data;
         return this.books;
       } catch (error) {
         return error;
