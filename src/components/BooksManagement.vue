@@ -34,10 +34,11 @@ export default {
     };
   },
   methods: {
-    getBooks() {
+    async getBooks() {
       try {
-        const response = axios.get('//boojbooks.test/api/books');
-        this.books = response.data;
+        const response = await axios.get('https://www.plushykingdom.com/api/books');
+        this.books = response;
+        console.log('Books are as follow');
         console.log(this.books);
       } catch (error) {
         // TODO: feed this to a debugging application such as sentry, telescope, etc... 
