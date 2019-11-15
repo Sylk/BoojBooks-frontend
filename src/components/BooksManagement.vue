@@ -36,7 +36,7 @@ export default {
   methods: {
     async getBooks() {
       try {
-        const response = await axios.get('https://www.plushykingdom.com/api/books');
+        const response = await axios.get('https://plushykingdom.com/api/books');
         this.books = response.data;
         return this.books;
       } catch (error) {
