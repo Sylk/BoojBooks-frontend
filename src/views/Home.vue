@@ -2,20 +2,21 @@
   <div class="home">
     <p>
       Welcome to BoojBooks, this is the frontend application portion of the test.
-      <br>
-      Documentation for the requirements is available <a href="https://github.com/ActiveWebsite/boojbooks">here</a>
+      <br />
+      Documentation for the requirements is available
+      <a href="https://github.com/ActiveWebsite/boojbooks">here</a>
     </p>
-    <BooksManagement/>
+    <BooksManagement />
   </div>
 </template>
 
 <script>
-import BooksManagement from '@/components/BooksManagement.vue';
+import BooksManagement from "@/components/BooksManagement.vue";
 
 export default {
-  name: 'home',
+  name: "home",
   components: {
-    BooksManagement,
-  },
+    BooksManagement
+  }
 };
 </script>
