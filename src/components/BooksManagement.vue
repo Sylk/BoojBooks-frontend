@@ -1,31 +1,36 @@
 <template>
   <div>
-    <h3>The Books Available Currently:</h3>
-    <div v-for="book in books" :key="book.id">
-      <book
-        :title="book.title"
-        :author="book.author"
-        :edition="book.edition"
-        :length="book.length"
-        :score="book.score"
-        :cover="book.cover"
-        :file="book.file"
-        :releaseDate="book.releaseDate"
-      />
-    </div>
+    <h3 class="management-header">Your current Collections:</h3>
+    <h3 class="management-header">The Books Available Currently:</h3>
+    <section class="book-shelf">
+      <div v-for="book in books" :key="book.id" class="book-binding">
+        <book
+          :id="book.id"
+          :title="book.title"
+          :author="book.author"
+          :edition="book.edition"
+          :length="book.length"
+          :score="book.score"
+          :cover="book.cover"
+          :file="book.file"
+          :publishedDate="book.publishedDate"
+          :editing="book.editing"
+        />
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import Book from '@/components/Book.vue';
+import axios from "axios";
+import Book from "@/components/Book.vue";
 
 export default {
-  name: 'BooksManagement',
+  name: "BooksManagement",
   components: {
-    Book,
+    Book
   },
-  beforeMount() {
+  mounted() {
     this.getBooks();
   },
   data() {
@@ -36,11 +41,17 @@ export default {
   methods: {
     async getBooks() {
       try {
-        const response = await axios.get('https://plushykingdom.com/api/books');
-        this.books = response.data;
-        return this.books;
+        const response = await axios.get("http://boojbooks.test/api/books");
+        this.books = response.data.data;
+
+        this.books.forEach(book => {
+          book.editing = false;
+        });
+
+        console.log(this.books);
       } catch (error) {
-        return error;
+        // TODO: feed this to a debugging application such as sentry, telescope, etc...
+        // console.log({ error });
       }
     },
   },
@@ -61,5 +72,29 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.management-header {
+  margin-bottom: 15px;
+}
+
+.book-shelf {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+.book-binding {
+  width: 25%;
+  margin-bottom: 25px;
+}
+
+@media only screen and (max-width: 1100px) {
+  .book-binding {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 25px;
+  }
 }
 </style>
