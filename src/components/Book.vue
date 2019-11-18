@@ -11,7 +11,16 @@
       <li>Published: {{ publishedDate }}</li>
     </ul>
     <h4 style="margin-bottom:2px;">Add To Collection?</h4>
-    <select style="margin-bottom:7px;">
+    <select style="margin-bottom:7px;" v-model="newCollection">
+      <option disabled value="" selected>Add to Collection</option>
+      <option v-for="collection in collections" :key="`${id}-${collection.name}`">{{
+        `
+        ${collection.id}-${collection.name}
+      `
+      }}</option>
+    </select>
+    <button @click="addToCollection(newCollection, id)">Add</button>
+    <br />
     <button @click="openBook(file)">Read</button>
     <button @click="editing = !editing" v-if="!editing">Edit</button>
     <button @click="saveEdit(id)" v-if="editing">Save</button>
@@ -27,7 +36,8 @@ export default {
   name: "Book",
   data: function() {
     return {
-      editing: false
+      editing: false,
+      newCollection: null
     };
   },
   props: {
@@ -54,6 +64,20 @@ export default {
     saveBook(book) {
       axios.patch(`https://plushykingdom.com/api/books/${book.id}`, book);
       this.$emit("editing", false);
+    },
+    addToCollection(collection, book) {
+      collection = collection.split("-");
+      console.log(collection);
+
+      axios
+        .post("http://boojbooks.test/api/collection/books", {
+          collectionName: collection[1],
+          collectionId: collection[0],
+          book: book
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   }
 };

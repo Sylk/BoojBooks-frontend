@@ -1,7 +1,42 @@
 <template>
   <div>
-    <h3 class="management-header">Your current Collections:</h3>
-    <h3 class="management-header">The Books Available Currently:</h3>
+    <h1 class="management-header">Your current Collections:</h1>
+    <section class="book-shelf">
+      <div class="collection-binding new-book">
+        <button
+          class="book-start-creation"
+          v-if="!createdCollection.creating"
+          @click="createdCollection.creating = !createdCollection.creating"
+        >
+          Create New Collection
+        </button>
+        <div class="book-creation-form" v-if="createdCollection.creating">
+          <input
+            type="text"
+            placeholder="Collection"
+            v-model="createdCollection.collection"
+            style="width: 100%;"
+          />
+          <button
+            class="book-finish-creation"
+            @click="createCollection(createdCollection.collection)"
+          >
+            Create
+          </button>
+          <button
+            class="book-finish-creation"
+            @click="createdCollection.creating = !createdCollection.creating"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+      <div v-for="collection in collections" :key="collection.id" class="collection-binding">
+        <!-- {{collection}} -->
+        <collection :id="collection.id" :name="collection.name" :books="collection.books" />
+      </div>
+    </section>
+    <h1 class="management-header">The Books Available Currently:</h1>
     <section class="book-shelf">
       <div class="book-binding new-book">
         <button
@@ -60,20 +95,24 @@
 <script>
 import axios from "axios";
 import Book from "@/components/Book.vue";
+import Collection from "@/components/Collection.vue";
 
 export default {
   name: "BooksManagement",
   components: {
-    Book
+    Book,
+    Collection
   },
   mounted() {
+    this.getCollections();
     this.getBooks();
   },
   data() {
     return {
       books: [],
-      collections: ["Swag", "Money", "420blazeit"],
+      collections: [],
       createdBook: { creating: false, title: null, author: null },
+      createdCollection: { creating: false, collection: null }
     };
   },
   methods: {
@@ -91,8 +130,12 @@ export default {
         console.log({ error });
       }
     },
-
-        console.log(this.collections);
+    async getCollections() {
+      try {
+        const response = await axios.get("http://boojbooks.test/api/collections");
+        this.collections = response.data.data;
+        console.log("Collections");
+        console.log(response);
       } catch (error) {
         // TODO: feed this to a debugging application such as sentry, telescope, etc...
         // console.log({ error });
@@ -110,6 +153,18 @@ export default {
         });
 
       this.createdBook = { creating: false, title: null, author: null };
+    },
+    createCollection(collection) {
+      console.log(collection);
+      axios
+        .post("http://boojbooks.test/api/collections", {
+          collection: collection
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+
+      this.createdCollection = { creating: false, collection: null };
     }
   }
 };
@@ -143,6 +198,11 @@ a {
 
 .book-binding {
   width: 25%;
+  margin-bottom: 25px;
+}
+
+.collection-binding {
+  width: 50%;
   margin-bottom: 25px;
 }
 
