@@ -1,6 +1,6 @@
 <template>
   <div class="book">
-    <img :src="cover" width="100%" />
+    <img :src="cover" width="85%" />
     <h3 class="title">{{ title }}</h3>
     <h4 class="author">by {{ author }}</h4>
     Book Metrics:
@@ -11,11 +11,11 @@
       <li>Published: {{ publishedDate }}</li>
     </ul>
     <h4 style="margin-bottom:2px;">Add To Collection?</h4>
-    <select v-model="selected" style="margin-bottom:7px;">
+    <select style="margin-bottom:7px;">
     <button @click="openBook(file)">Read</button>
-    <button @click="editBook()" v-if="!editing">Edit</button>
-    <button @click="editBook()" v-if="editing">Save</button>
-    <button @click="cancelEdit()" v-if="editing">Cancel</button>
+    <button @click="editing = !editing" v-if="!editing">Edit</button>
+    <button @click="saveEdit(id)" v-if="editing">Save</button>
+    <button @click="editing = !editing" v-if="editing">Cancel</button>
     <button @click="destroyBook(id)" :class="{ disabled: !editing }">Destroy</button>
   </div>
 </template>
@@ -25,6 +25,11 @@ import axios from "axios";
 
 export default {
   name: "Book",
+  data: function() {
+    return {
+      editing: false
+    };
+  },
   props: {
     id: Number,
     title: String,
@@ -35,7 +40,6 @@ export default {
     cover: String,
     file: String,
     publishedDate: String,
-    editing: Boolean,
     collections: Array
   },
   methods: {
@@ -44,13 +48,8 @@ export default {
       window.focus();
     },
     destroyBook(bookId) {
-      axios.delete(`https://plushykingdom.com/api/books/${bookId}`);
-    },
-    editBook() {
-      this.$emit("editing", true);
-    },
-    cancelEdit() {
-      this.$emit("editing", false);
+      axios.delete(`//boojbooks.test/api/books/${bookId}`);
+      // vm.$destroy();
     },
     saveBook(book) {
       axios.patch(`https://plushykingdom.com/api/books/${book.id}`, book);
@@ -63,7 +62,7 @@ export default {
 <style lang="scss" scoped>
 .book {
   .title {
-    margin-top:-80px;
+    margin-top: -80px;
     color: #ffffff;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   }
@@ -86,6 +85,8 @@ export default {
     border: 2px solid #7ed1ab;
     border-radius: 12px;
     max-height: 517px;
+    padding-bottom: 10px;
+    padding-top: 15px;
   }
 }
 </style>
