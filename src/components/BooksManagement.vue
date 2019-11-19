@@ -31,9 +31,17 @@
           </button>
         </div>
       </div>
-      <div v-for="collection in collections" :key="collection.id" class="collection-binding">
-        <!-- {{collection}} -->
-        <collection :id="collection.id" :name="collection.name" :books="collection.books" />
+      <div
+        v-for="(collection, index) in collections"
+        :key="collection.id"
+        class="collection-binding"
+      >
+        <collection
+          :id="collection.id"
+          :name="collection.name"
+          :books="collection.books"
+          v-on:delete-row="deleteCollection(index)"
+        />
       </div>
     </section>
     <h1 class="management-header">The Books Available Currently:</h1>
@@ -74,7 +82,7 @@
           </button>
         </div>
       </div>
-      <div v-for="book in books" :key="book.id" class="book-binding">
+      <div v-for="(book, index) in books" :key="book.id" class="book-binding">
         <book
           :id="book.id"
           :title="book.title"
@@ -86,6 +94,7 @@
           :file="book.file"
           :publishedDate="book.publishedDate"
           :collections="collections"
+          v-on:delete-row="deleteBook(index)"
         />
       </div>
     </section>
@@ -124,6 +133,7 @@ export default {
         this.books.forEach(book => {
           book.editing = false;
         });
+        console.log("Books");
         console.log(this.books);
       } catch (error) {
         // TODO: feed this to a debugging application such as sentry, telescope, etc...
@@ -148,6 +158,11 @@ export default {
           title: title,
           author: author
         })
+        .then(response => {
+          console.log("Book Response");
+          console.log(response);
+          this.addBook(response);
+        })
         .catch(function(error) {
           console.log(error);
         });
@@ -160,11 +175,40 @@ export default {
         .post("http://boojbooks.test/api/collections", {
           collection: collection
         })
+        .then(response => {
+          console.log("Collection");
+          console.log(response);
+          this.addCollection(response);
+        })
         .catch(function(error) {
           console.log(error);
         });
 
       this.createdCollection = { creating: false, collection: null };
+    },
+    addCollection: function(collection) {
+      console.log(collection.id);
+      collection = [
+        {
+          id: collection.id,
+          name: collection.name,
+          books: []
+        }
+      ];
+
+      // collection.push({ books: [] });
+      this.collections.push(collection);
+      console.log(this.collections);
+    },
+    deleteCollection: function(index) {
+      this.collections.splice(index, 1);
+    },
+    addBook: function(book) {
+      // console.log(book);
+      this.books.push(book);
+    },
+    deleteBook: function(index) {
+      this.books.splice(index, 1);
     }
   }
 };

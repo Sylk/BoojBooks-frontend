@@ -59,7 +59,7 @@ export default {
     },
     destroyBook(bookId) {
       axios.delete(`//boojbooks.test/api/books/${bookId}`);
-      // vm.$destroy();
+      this.$emit("delete-row");
     },
     saveBook(book) {
       axios.patch(`https://plushykingdom.com/api/books/${book.id}`, book);

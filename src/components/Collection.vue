@@ -14,11 +14,11 @@
           <button @click="removeBook(book)">X</button>
         </li>
       </ul>
+      <h4>Sorting</h4>
+      <button @click="sort(alphabetical)">Alphabetical Sort</button>
+      <br />
+      <br />
     </div>
-    <h4>Sorting</h4>
-    <button @click="sort(alphabetical)">Alphabetical Sort</button>
-    <br />
-    <br />
     <!-- Edit state contains re-ordering -->
     <!-- <button @click="editing = !editing" v-if="!editing">Edit</button>
     <button @click="saveEdit(id)" v-if="editing">Save</button>
@@ -48,6 +48,7 @@ export default {
       axios.delete(`http://boojbooks.test/api/collections/${collection}`).catch(function(error) {
         console.log(error);
       });
+      this.$emit("delete-row");
 
       // TODO Force re-render or something to remove item
     },
