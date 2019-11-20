@@ -58,7 +58,7 @@ export default {
       window.focus();
     },
     destroyBook(bookId) {
-      axios.delete(`//boojbooks.test/api/books/${bookId}`);
+      axios.delete(`https://plushykingdom.com/api/books/${bookId}`);
       this.$emit("delete-row");
     },
     saveBook(book) {
@@ -70,7 +70,7 @@ export default {
       console.log(collection);
 
       axios
-        .post("http://boojbooks.test/api/collection/books", {
+        .post("https://plushykingdom.com/api/collection/books", {
           collectionName: collection[1],
           collectionId: collection[0],
           book: book

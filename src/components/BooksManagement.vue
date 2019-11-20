@@ -127,7 +127,7 @@ export default {
   methods: {
     async getBooks() {
       try {
-        const response = await axios.get("http://boojbooks.test/api/books");
+        const response = await axios.get("https://plushykingdom.com/api/books");
         this.books = response.data.data;
 
         this.books.forEach(book => {
@@ -142,7 +142,7 @@ export default {
     },
     async getCollections() {
       try {
-        const response = await axios.get("http://boojbooks.test/api/collections");
+        const response = await axios.get("https://plushykingdom.com/api/collections");
         this.collections = response.data.data;
         console.log("Collections");
         console.log(response);
@@ -154,7 +154,7 @@ export default {
     createBook(title, author) {
       console.log(title, author);
       axios
-        .post("http://boojbooks.test/api/books", {
+        .post("https://plushykingdom.com/api/books", {
           title: title,
           author: author
         })
@@ -172,7 +172,7 @@ export default {
     createCollection(collection) {
       console.log(collection);
       axios
-        .post("http://boojbooks.test/api/collections", {
+        .post("https://plushykingdom.com/api/collections", {
           collection: collection
         })
         .then(response => {
@@ -204,7 +204,8 @@ export default {
       this.collections.splice(index, 1);
     },
     addBook: function(book) {
-      // console.log(book);
+      console.log(book);
+      // Note: It understands it was made, but all of the values are undefined...
       this.books.push(book);
     },
     deleteBook: function(index) {

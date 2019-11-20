@@ -45,7 +45,7 @@ export default {
   methods: {
     destroyCollection(collection) {
       // eslint-disable-next-line prettier/prettier
-      axios.delete(`http://boojbooks.test/api/collections/${collection}`).catch(function(error) {
+      axios.delete(`https://plushykingdom.com/api/collections/${collection}`).catch(function(error) {
         console.log(error);
       });
       this.$emit("delete-row");
@@ -53,11 +53,11 @@ export default {
       // TODO Force re-render or something to remove item
     },
     // saveCollection(collection) {
-    //   axios.patch(`http://boojbooks.test/api/collections/${collection.id}`, collection);
+    //   axios.patch(`https://plushykingdom.com/api/collections/${collection.id}`, collection);
     //   this.$emit("editing", false);
     // },
     sortBook(book, direction) {
-      axios.patch(`http://boojbooks.test/api/collection/${book.id}`, {
+      axios.patch(`https://plushykingdom.com/api/collection/${book.id}`, {
         collection: this.id,
         sort: direction
       });
