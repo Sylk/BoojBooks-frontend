@@ -9,8 +9,8 @@
       <ul>
         <li v-for="book in books" :key="`${name}-${book.id}`">
           {{ `${book.title} by ${book.author}` }}
-          <button @click="sortBook(book)">⟰</button>
-          <button @click="removeBook(book)">⟱</button>
+          <button>⟰</button>
+          <button>⟱</button>
           <button @click="removeBook(book)">X</button>
         </li>
       </ul>
@@ -59,6 +59,14 @@ export default {
         collection: this.id,
         sort: direction
       });
+    },
+    removeBook(book) {
+      axios.delete("https://plushykingdom.com/api/collection/books", {
+        book: book.id,
+        collectionId: this.id
+      });
+
+      this.$emit("delete-book");
     }
   }
 };

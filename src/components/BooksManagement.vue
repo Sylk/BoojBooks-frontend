@@ -41,6 +41,7 @@
           :name="collection.name"
           :books="collection.books"
           v-on:delete-row="deleteCollection(index)"
+          v-on:delete-book="deleteBookFromCollection(index)"
         />
       </div>
     </section>
@@ -173,6 +174,9 @@ export default {
     },
     deleteCollection: function(index) {
       this.collections.splice(index, 1);
+    },
+    deleteBookFromCollection: function(collection, book) {
+      this.collections.collection.splice(book, 1);
     },
     addBook: function(book) {
       // Note: It understands it was made, but all of the values are undefined...
