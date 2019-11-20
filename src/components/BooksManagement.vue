@@ -126,25 +126,16 @@ export default {
   },
   methods: {
     async getBooks() {
-      try {
-        const response = await axios.get("https://plushykingdom.com/api/books");
-        this.books = response.data.data;
+      const response = await axios.get("https://plushykingdom.com/api/books");
+      this.books = response.data.data;
 
-        this.books.forEach(book => {
-          book.editing = false;
-        });
-
-      } catch (error) {
-
-      }
+      this.books.forEach(book => {
+        book.editing = false;
+      });
     },
     async getCollections() {
-      try {
-        const response = await axios.get("https://plushykingdom.com/api/collections");
-        this.collections = response.data.data;
-      } catch (error) {
-        // TODO: feed this to a debugging application such as sentry, telescope, etc...
-      }
+      const response = await axios.get("https://plushykingdom.com/api/collections");
+      this.collections = response.data.data;
     },
     createBook(title, author) {
       axios
