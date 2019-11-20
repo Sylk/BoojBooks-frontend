@@ -133,61 +133,42 @@ export default {
         this.books.forEach(book => {
           book.editing = false;
         });
-        console.log("Books");
-        console.log(this.books);
+
       } catch (error) {
-        // TODO: feed this to a debugging application such as sentry, telescope, etc...
-        console.log({ error });
+
       }
     },
     async getCollections() {
       try {
         const response = await axios.get("https://plushykingdom.com/api/collections");
         this.collections = response.data.data;
-        console.log("Collections");
-        console.log(response);
       } catch (error) {
         // TODO: feed this to a debugging application such as sentry, telescope, etc...
-        // console.log({ error });
       }
     },
     createBook(title, author) {
-      console.log(title, author);
       axios
         .post("https://plushykingdom.com/api/books", {
           title: title,
           author: author
         })
         .then(response => {
-          console.log("Book Response");
-          console.log(response);
           this.addBook(response);
-        })
-        .catch(function(error) {
-          console.log(error);
         });
-
       this.createdBook = { creating: false, title: null, author: null };
     },
     createCollection(collection) {
-      console.log(collection);
       axios
         .post("https://plushykingdom.com/api/collections", {
           collection: collection
         })
         .then(response => {
-          console.log("Collection");
-          console.log(response);
           this.addCollection(response);
-        })
-        .catch(function(error) {
-          console.log(error);
         });
 
       this.createdCollection = { creating: false, collection: null };
     },
     addCollection: function(collection) {
-      console.log(collection.id);
       collection = [
         {
           id: collection.id,
@@ -198,13 +179,11 @@ export default {
 
       // collection.push({ books: [] });
       this.collections.push(collection);
-      console.log(this.collections);
     },
     deleteCollection: function(index) {
       this.collections.splice(index, 1);
     },
     addBook: function(book) {
-      console.log(book);
       // Note: It understands it was made, but all of the values are undefined...
       this.books.push(book);
     },

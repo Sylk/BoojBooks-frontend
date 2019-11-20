@@ -67,17 +67,12 @@ export default {
     },
     addToCollection(collection, book) {
       collection = collection.split("-");
-      console.log(collection);
 
-      axios
-        .post("https://plushykingdom.com/api/collection/books", {
-          collectionName: collection[1],
-          collectionId: collection[0],
-          book: book
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      axios.post("https://plushykingdom.com/api/collection/books", {
+        collectionName: collection[1],
+        collectionId: collection[0],
+        book: book
+      });
     }
   }
 };

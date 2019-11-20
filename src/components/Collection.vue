@@ -46,8 +46,7 @@ export default {
     destroyCollection(collection) {
       // eslint-disable-next-line prettier/prettier
       axios.delete(`https://plushykingdom.com/api/collections/${collection}`).catch(function(error) {
-        console.log(error);
-      });
+        });
       this.$emit("delete-row");
 
       // TODO Force re-render or something to remove item
