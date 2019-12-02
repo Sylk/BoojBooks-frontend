@@ -10,16 +10,9 @@
       <li>Score: {{ score }} out of 100</li>
       <li>Published: {{ publishedDate }}</li>
     </ul>
-    <h4 style="margin-bottom:2px;">Add To Collection?</h4>
-    <select style="margin-bottom:7px;" v-model="newCollection">
-      <option disabled value="" selected>Add to Collection</option>
-      <option v-for="collection in collections" :key="`${id}-${collection.name}`">{{
-        `
-        ${collection.id}-${collection.name}
-      `
-      }}</option>
-    </select>
-    <button @click="addToCollection(newCollection, id)">Add</button>
+    <h4 style="margin-bottom:2px;">
+      Add To Collection?<button style="margin-left:6px;" @click="addToCollection(id)">Add</button>
+    </h4>
     <br />
     <button @click="openBook(file)">Read</button>
     <button @click="editing = !editing" v-if="!editing">Edit</button>
@@ -49,8 +42,7 @@ export default {
     score: Number,
     cover: String,
     file: String,
-    publishedDate: String,
-    collections: Array
+    publishedDate: String
   },
   methods: {
     openBook(file) {
@@ -58,21 +50,22 @@ export default {
       window.focus();
     },
     destroyBook(bookId) {
-      axios.delete(`https://plushykingdom.com/api/books/${bookId}`);
+      axios.delete(`http://boojbooks.test/api/books/${bookId}`);
       this.$emit("delete-row");
     },
     saveBook(book) {
-      axios.patch(`https://plushykingdom.com/api/books/${book.id}`, book);
+      axios.patch(`http://boojbooks.test/api/books/${book.id}`, book);
       this.$emit("editing", false);
     },
-    addToCollection(collection, book) {
-      collection = collection.split("-");
-
-      axios.post("https://plushykingdom.com/api/collection/books", {
-        collectionName: collection[1],
-        collectionId: collection[0],
-        book: book
-      });
+    addToCollection(bookId) {
+      axios
+        .post("http://boojbooks.test/api/collection/books", {
+          bookId: bookId
+        })
+        .then(response => {
+          this.$emit("add-to-collection", response.data);
+        });
+      // emit created event with the book id
     }
   }
 };

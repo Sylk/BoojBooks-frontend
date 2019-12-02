@@ -1,48 +1,9 @@
 <template>
   <div>
-    <h1 class="management-header">Your current Collections:</h1>
+    <h1 class="management-header">Your current Collection:</h1>
     <section class="book-shelf">
-      <div class="collection-binding new-book">
-        <button
-          class="book-start-creation"
-          v-if="!createdCollection.creating"
-          @click="createdCollection.creating = !createdCollection.creating"
-        >
-          Create New Collection
-        </button>
-        <div class="book-creation-form" v-if="createdCollection.creating">
-          <input
-            type="text"
-            placeholder="Collection"
-            v-model="createdCollection.collection"
-            style="width: 100%;"
-          />
-          <button
-            class="book-finish-creation"
-            @click="createCollection(createdCollection.collection)"
-          >
-            Create
-          </button>
-          <button
-            class="book-finish-creation"
-            @click="createdCollection.creating = !createdCollection.creating"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-      <div
-        v-for="(collection, index) in collections"
-        :key="collection.id"
-        class="collection-binding"
-      >
-        <collection
-          :id="collection.id"
-          :name="collection.name"
-          :books="collection.books"
-          v-on:delete-row="deleteCollection(index)"
-          v-on:delete-book="deleteBookFromCollection(index)"
-        />
+      <div class="collection-binding">
+        <collection :books="collection" v-on:delete-book="deleteBookFromCollection()" />
       </div>
     </section>
     <h1 class="management-header">The Books Available Currently:</h1>
@@ -94,8 +55,8 @@
           :cover="book.cover"
           :file="book.file"
           :publishedDate="book.publishedDate"
-          :collections="collections"
           v-on:delete-row="deleteBook(index)"
+          v-on:add-to-collection="addToCollection(book)"
         />
       </div>
     </section>
@@ -120,14 +81,14 @@ export default {
   data() {
     return {
       books: [],
-      collections: [],
+      collection: [],
       createdBook: { creating: false, title: null, author: null },
       createdCollection: { creating: false, collection: null }
     };
   },
   methods: {
     async getBooks() {
-      const response = await axios.get("https://plushykingdom.com/api/books");
+      const response = await axios.get("http://boojbooks.test/api/books");
       this.books = response.data.data;
 
       this.books.forEach(book => {
@@ -135,12 +96,12 @@ export default {
       });
     },
     async getCollections() {
-      const response = await axios.get("https://plushykingdom.com/api/collections");
-      this.collections = response.data.data;
+      const response = await axios.get("http://boojbooks.test/api/collections");
+      this.collection = response.data.data;
     },
     createBook(title, author) {
       axios
-        .post("https://plushykingdom.com/api/books", {
+        .post("http://boojbooks.test/api/books", {
           title: title,
           author: author
         })
@@ -149,34 +110,12 @@ export default {
         });
       this.createdBook = { creating: false, title: null, author: null };
     },
-    createCollection(collection) {
-      axios
-        .post("https://plushykingdom.com/api/collections", {
-          collection: collection
-        })
-        .then(response => {
-          this.addCollection(response);
-        });
-
-      this.createdCollection = { creating: false, collection: null };
+    addToCollection: function(book) {
+      book = { book_id: book.id, created_at: book.publishedDate };
+      this.collection.push(book);
     },
-    addCollection: function(collection) {
-      collection = [
-        {
-          id: collection.id,
-          name: collection.name,
-          books: []
-        }
-      ];
-
-      // collection.push({ books: [] });
-      this.collections.push(collection);
-    },
-    deleteCollection: function(index) {
-      this.collections.splice(index, 1);
-    },
-    deleteBookFromCollection: function(collection, book) {
-      this.collections.collection.splice(book, 1);
+    deleteBookFromCollection: function(book) {
+      this.collection.splice(book, 1);
     },
     addBook: function(book) {
       // Note: It understands it was made, but all of the values are undefined...

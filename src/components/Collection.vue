@@ -1,29 +1,29 @@
 <template>
   <div class="book">
-    <h3>{{ name }}</h3>
     <p v-if="books.length == 0 || books === undefined">
       Looks like you haven't added any books yet...
     </p>
     <div v-else>
       Contains The Following Books:
       <ul>
-        <li v-for="book in books" :key="`${name}-${book.id}`">
-          {{ `${book.title} by ${book.author}` }}
-          <button>⟰</button>
-          <button>⟱</button>
-          <button @click="removeBook(book)">X</button>
+        <!-- <li v-for="book in books" :key="`${name}-${book.id}`"> -->
+        <li v-for="book in books" :key="`$${book.id}`">
+          <!-- {{ `${book.title} by ${book.author}` }} -->
+          {{ book['book_id'] }}
+          <button @click="sortBook(book['book_id'], book['book_id'] + 1)">⟰</button>
+          <button @click="sortBook(book['book_id'], book['book_id'] - 1)">⟱</button>
+          <button @click="removeBook(book['book_id'])">X</button>
         </li>
       </ul>
       <h4>Sorting</h4>
-      <button @click="sort(alphabetical)">Alphabetical Sort</button>
+      <button @click="sort(alphabetical)">Randomize</button>
       <br />
       <br />
     </div>
     <!-- Edit state contains re-ordering -->
     <!-- <button @click="editing = !editing" v-if="!editing">Edit</button>
-    <button @click="saveEdit(id)" v-if="editing">Save</button>
-    <button @click="editing = !editing" v-if="editing">Cancel</button> -->
-    <button @click="destroyCollection(id)">Destroy</button>
+    <button @click="saveEdit(id)" v-if="editing">Save</button> -->
+    <button @click="editing = !editing" v-if="editing">Cancel</button>
   </div>
 </template>
 
@@ -34,39 +34,24 @@ export default {
   name: "Collection",
   data: function() {
     return {
+      order: [],
       editing: false
     };
   },
   props: {
-    id: Number,
-    name: String,
     books: Array
   },
   methods: {
-    destroyCollection(collection) {
-      // eslint-disable-next-line prettier/prettier
-      axios.delete(`https://plushykingdom.com/api/collections/${collection}`);
-      this.$emit("delete-row");
-
-      // TODO Force re-render or something to remove item
-    },
-    // saveCollection(collection) {
-    //   axios.patch(`https://plushykingdom.com/api/collections/${collection.id}`, collection);
-    //   this.$emit("editing", false);
-    // },
-    sortBook(book, direction) {
-      axios.patch(`https://plushykingdom.com/api/collection/${book.id}`, {
-        collection: this.id,
-        sort: direction
+    sortBook(origin, destination) {
+      axios.post(`http://boojbooks.test/api/collection/sort`, {
+        type: "swap",
+        originId: origin,
+        destinationId: destination
       });
     },
     removeBook(book) {
-      axios.delete("https://plushykingdom.com/api/collection/books", {
-        book: book.id,
-        collectionId: this.id
-      });
-
-      this.$emit("delete-book");
+      axios.delete(`http://boojbooks.test/api/collection/books/${book}`);
+      this.$emit("delete-book", book);
     }
   }
 };
