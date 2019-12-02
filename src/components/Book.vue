@@ -50,16 +50,16 @@ export default {
       window.focus();
     },
     destroyBook(bookId) {
-      axios.delete(`http://boojbooks.test/api/books/${bookId}`);
+      axios.delete(`https://plushykingdom.com/api/books/${bookId}`);
       this.$emit("delete-row");
     },
     saveBook(book) {
-      axios.patch(`http://boojbooks.test/api/books/${book.id}`, book);
+      axios.patch(`https://plushykingdom.com/api/books/${book.id}`, book);
       this.$emit("editing", false);
     },
     addToCollection(bookId) {
       axios
-        .post("http://boojbooks.test/api/collection/books", {
+        .post("https://plushykingdom.com/api/collection/books", {
           bookId: bookId
         })
         .then(response => {

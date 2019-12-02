@@ -43,14 +43,14 @@ export default {
   },
   methods: {
     sortBook(origin, destination) {
-      axios.post(`http://boojbooks.test/api/collection/sort`, {
+      axios.post(`https://plushykingdom.com/api/collection/sort`, {
         type: "swap",
         originId: origin,
         destinationId: destination
       });
     },
     removeBook(book) {
-      axios.delete(`http://boojbooks.test/api/collection/books/${book}`);
+      axios.delete(`https://plushykingdom.com/api/collection/books/${book}`);
       this.$emit("delete-book", book);
     }
   }

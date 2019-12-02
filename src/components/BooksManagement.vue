@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     async getBooks() {
-      const response = await axios.get("http://boojbooks.test/api/books");
+      const response = await axios.get("https://plushykingdom.com/api/books");
       this.books = response.data.data;
 
       this.books.forEach(book => {
@@ -96,12 +96,12 @@ export default {
       });
     },
     async getCollections() {
-      const response = await axios.get("http://boojbooks.test/api/collections");
+      const response = await axios.get("https://plushykingdom.com/api/collections");
       this.collection = response.data.data;
     },
     createBook(title, author) {
       axios
-        .post("http://boojbooks.test/api/books", {
+        .post("https://plushykingdom.com/api/books", {
           title: title,
           author: author
         })
